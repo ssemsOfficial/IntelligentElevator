@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MQTT Web Client</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mqtt/4.2.6/mqtt.min.js"></script>
+</head>
+<body>
+    <h1>MQTT Web Client</h1>
+    <button onclick="publishMessage()">Publish Message</button>
+    <p id="status">Connecting...</p>
+
+    <script>
+        // Set up MQTT client connection with WebSocket protocol
+        const client = mqtt.connect('ws://192.168.241.131:9001'); // Replace <RaspberryPi_IP> with your Raspberry Pi's IP address
+        const topic = 'test/topic'; // Set your specific topic here
+
+        client.on('connect', () => {
+            document.getElementById('status').textContent = 'Connected to MQTT Broker';
+            console.log('Connected to MQTT Broker');
+        });
+
+        client.on('error', (error) => {
+            document.getElementById('status').textContent = 'Connection error: ' + error;
+            console.error('Connection error:', error);
+        });
+
+        function publishMessage() {
+            const message = 'Hello, MQTT!';
+            client.publish(topic, message);
+            console.log(`Message published to topic ${topic}: ${message}`);
+        }
+    </script>
+</body>
+</html>
